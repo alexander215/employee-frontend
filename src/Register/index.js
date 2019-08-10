@@ -39,6 +39,7 @@ class Register extends Component {
             console.log('Logged in');
             this.props.history.push('/employees');
         }
+        console.log(this.props, '<--this.props in ./Register')
     }
 
     render() {
