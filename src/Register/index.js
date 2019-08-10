@@ -8,9 +8,17 @@ class Register extends Component {
     }
 
     handleChange = (e) => {
+        if ((e.currentTarget.name === "admin") && (e.currentTarget.value === "on")){
+            console.log('inside if')
+            this.setState({
+                admin: true
+            });
+        } else {
         this.setState({
             [e.currentTarget.name]: e.currentTarget.value
         });
+    }
+        console.log(this.state)
     }
 
     handleSubmit = async(e) => {
@@ -23,26 +31,26 @@ class Register extends Component {
                 'Content-Type': 'application/json'
             }
         })
+        const parsedRegister = await register.json();
+
+        console.log(parsedRegister, '<--parsedRegister from Register')
+
+        if (parsedRegister.status.message === "User Logged In") {
+            console.log('Logged in');
+            this.props.history.push('/employees');
+        }
     }
 
     render() {
         return (
-            <form>
-                <label>
-                    Username:
-                </label>
+            <form onSubmit={this.handleSubmit}>
+                <label>Username: </label>
                 <input type="text" name="username" onChange={this.handleChange} />
-                <label>
-                    Password:
-                </label>
+                <label>Password:</label>
                 <input type="password" name="password" onChange={this.handleChange} />
-                <label>
-                    Check if admin:
-                </label>
-                <input type="checkbox" name="admin" />
-                <button type="submit">
-                    Register
-                </button>
+                <label>Check if admin: </label>
+                <input type="checkbox" name="admin" onChange={this.handleChange} />
+                <button type="submit">Register</button>
             </form>
         )
 
