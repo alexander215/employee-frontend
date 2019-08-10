@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 class Register extends Component {
     state = {
         username: '',
-        password: ''
+        password: '',
+        admin: false
     }
 
     handleChange = (e) => {
@@ -35,6 +36,10 @@ class Register extends Component {
                     Password:
                 </label>
                 <input type="password" name="password" onChange={this.handleChange} />
+                <label>
+                    Check if admin:
+                </label>
+                <input type="checkbox" name="admin" />
                 <button type="submit">
                     Register
                 </button>
