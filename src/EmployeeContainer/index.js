@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CreateEmployee from '../CreateEmployee';
-import EmployeeList from '../EmployeeList';
+import Employees from '../EmployeeList';
 
 class EmployeeContainer extends Component {
     state = {
@@ -15,6 +15,28 @@ class EmployeeContainer extends Component {
             annualSalary: ''
         }
     }
+
+    componentDidMount(){
+        this.getEmployees();
+    }
+
+    getEmployees = async () => {
+        try {
+            const responseGetEmployees = await fetch('http://localhost:9000/api/v1/employee');
+            console.log(responseGetEmployees, "<-- getEmployees")
+            if (responseGetEmployees.status !== 200){
+                throw Error('404 from server')
+            }
+            const employeeResponse = await responseGetEmployees.json()
+            console.log(employeeResponse, "<-- employeeResponse")
+            this.setState({
+                employees: [...employeeResponse.data]
+            })
+        } catch(err) {
+            return err
+        }
+    }
+
     addEmployee = async (employee, e) => {
         e.preventDefault();
         // console.log(employee, '<-- employee inside of addEmployee')
@@ -50,7 +72,7 @@ class EmployeeContainer extends Component {
         return (
             <div className="employee-container">
                 <CreateEmployee addEmployee={ this.addEmployee } />
-                <EmployeeList employees={this.state.employees} />
+                <Employees employees={this.state.employees} />
             </div>
         )
     }
