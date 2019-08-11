@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import CreateEmployee from '../CreateEmployee';
+import EmployeeList from '../EmployeeList';
 
 class EmployeeContainer extends Component {
     state = {
@@ -13,10 +15,42 @@ class EmployeeContainer extends Component {
             annualSalary: ''
         }
     }
+    addEmployee = async (employee, e) => {
+        e.preventDefault();
+        // console.log(employee, '<-- employee inside of addEmployee')
+        console.log(this.state, "<-- this.state inside addEmployee")
+        try {
+            const createEmployee = await fetch('http://localhost:9000/api/v1/employee', {
+                method:'POST',
+                body: JSON.stringify(employee),
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log(createEmployee, '<--createEmployee fetch')
+            if (createEmployee.status !== 200) {
+                throw Error('Resource not found')
+            }
+            const createEmployeeResponse = await createEmployee.json();
+            console.log(createEmployeeResponse.data, '<--createEmployeeResponse.data')
+            this.setState(prevState => ({
+                employees: [...prevState.employees, createEmployeeResponse.data]
+
+            }))
+            console.log(this.state, '<--new state')
+        } catch(err){
+            console.log(err, '<--err createEmployee')
+            return err
+        }
+
+    }
+
     render() {
         return (
-            <div>
-                Test
+            <div className="employee-container">
+                <CreateEmployee addEmployee={ this.addEmployee } />
+                <EmployeeList employees={this.state.employees} />
             </div>
         )
     }
