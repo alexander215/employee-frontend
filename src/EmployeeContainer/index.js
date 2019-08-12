@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CreateEmployee from '../CreateEmployee';
 import Employees from '../EmployeeList';
+import EditEmployee from '../EditEmployee';
 
 class EmployeeContainer extends Component {
     state = {
@@ -35,6 +36,58 @@ class EmployeeContainer extends Component {
         } catch(err) {
             return err
         }
+    }
+
+    showModal = (employee) => {
+        console.log(employee, '<--employee in showModal')
+        this.setState({
+            employeeToEdit: employee,
+            showEditModal: !this.state.showEditModal
+        })
+    }
+
+    closeAndEdit = async (e) => {
+        e.preventDefault();
+        try{
+            const editRequest = await fetch('http://localhost:9000/api/v1/employee/' + this.state.employeeToEdit._id, {
+                method: 'PUT',
+                body: JSON.stringify(this.state.employeeToEdit),
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            console.log(editRequest, "<--editRequest inside closeAndEdit")
+            if (editRequest.status !== 200){
+                throw Error('editRequest not working')
+            }
+            
+            const editResponse = await editRequest.json();
+            console.log(editResponse, "<--editResponse inside closeAndEdit")
+            
+            const editedEmployeeArray = this.state.employees.map(employee => {
+                if (employee._id === editResponse.data._id){
+                    employee = editResponse.data
+                }
+                return employee
+            })
+            this.setState ({
+                employees: editedEmployeeArray,
+                showEditModal: false
+            })
+        }catch(err){
+            console.log(err, "<--error in closeAndEdit")
+            return err
+        }
+    }
+
+    handleFormChange = (e) => {
+        this.setState( {
+            employeeToEdit: {
+                ...this.state.employeeToEdit,
+                [e.target.name]: e.target.value
+            }
+        })
     }
 
     addEmployee = async (employee, e) => {
@@ -72,7 +125,8 @@ class EmployeeContainer extends Component {
         return (
             <div className="employee-container">
                 <CreateEmployee addEmployee={ this.addEmployee } />
-                <Employees employees={this.state.employees} />
+                <Employees employees={this.state.employees} showModal={this.showModal} />
+                {this.state.showEditModal ? <EditEmployee closeAndEdit={this.closeAndEdit} employeeToEdit={this.state.employeeToEdit} handleFormChange={this.handleFormChange} /> : null }
             </div>
         )
     }

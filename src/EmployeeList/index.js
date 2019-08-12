@@ -9,7 +9,7 @@ const Employees = (props) => {
                 <div>{employee.birthDate}</div>
                 <div>{employee.department}</div>
                 <div>{employee.annualSalary}</div>
-                <button type="submit">Edit</button>
+                <button onClick={props.showModal.bind(null, employee)} type="submit">Edit</button>
                 <button type="submit">Delete</button>
             </li>
         )
