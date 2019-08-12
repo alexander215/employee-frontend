@@ -38,7 +38,13 @@ class Register extends Component {
 
         if (parsedRegister.status.message === "User Logged In") {
             console.log('Logged in');
-            this.props.history.push('/employees');
+            this.props.history.push({
+                pathname: '/employees',
+                state: {
+                    username: this.state.username,
+                    admin: this.state.admin
+                }
+            });
         }
         console.log(this.props, '<--this.props in ./Register')
     }

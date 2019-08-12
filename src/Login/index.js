@@ -32,7 +32,13 @@ class Login extends Component {
             this.setState({
                 message: ''
             })
-            this.props.history.push('/employees')
+            this.props.history.push({
+                pathname: '/employees',
+                state: { 
+                    username: this.state.username,
+                    admin: parsedLogin.data.admin
+                }
+            })
         } else {
             this.setState({
                 message: "Incorrect username or password"

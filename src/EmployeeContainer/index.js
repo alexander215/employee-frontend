@@ -24,6 +24,7 @@ class EmployeeContainer extends Component {
     }
 
     componentDidMount(){
+        console.log(this.props, "<-- this.props in employeeContainer componentDidMount")
         this.getEmployees();
     }
 
@@ -37,7 +38,12 @@ class EmployeeContainer extends Component {
             const employeeResponse = await responseGetEmployees.json()
             console.log(employeeResponse, "<-- employeeResponse")
             this.setState({
-                employees: [...employeeResponse.data]
+                employees: [...employeeResponse.data],
+                currentUser: {
+                    username: this.props.location.state.username,
+                    isAdmin: this.props.location.state.admin
+                }
+
             })
         } catch(err) {
             return err
@@ -150,10 +156,11 @@ class EmployeeContainer extends Component {
     }
 
     render() {
+        console.log(this.state, "<---this.state EmployeeContainer render")
         return (
             <div className="employee-container">
                 <CreateEmployee addEmployee={ this.addEmployee } />
-                <Employees employees={this.state.employees} showModal={this.showModal} delete={this.deleteEmployee} />
+                <Employees employees={this.state.employees} showModal={this.showModal} delete={this.deleteEmployee} admin={ this.state.currentUser.isAdmin }/>
                 {this.state.showEditModal ? <EditEmployee closeAndEdit={this.closeAndEdit} employeeToEdit={this.state.employeeToEdit} handleFormChange={this.handleFormChange} /> : null }
             </div>
         )
