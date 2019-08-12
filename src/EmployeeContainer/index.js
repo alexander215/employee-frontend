@@ -94,6 +94,8 @@ class EmployeeContainer extends Component {
         e.preventDefault();
         // console.log(employee, '<-- employee inside of addEmployee')
         console.log(this.state, "<-- this.state inside addEmployee")
+        console.log(employee, '<-- employee in addEmployee')
+    
         try {
             const createEmployee = await fetch('http://localhost:9000/api/v1/employee', {
                 method:'POST',

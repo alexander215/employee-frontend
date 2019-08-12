@@ -16,7 +16,7 @@ const EditEmployee = (props) => {
                 <label>
                     Edit Date of Birth:
                 </label>
-                <input type="text" name="birthDate" onChange={props.handleFormChange} value={props.employeeToEdit.birthDate} /> 
+                <input type="date" name="birthDate" onChange={props.handleFormChange} value={props.employeeToEdit.birthDate.substring(0,10)} /> 
                 <label>
                     Edit Department:
                 </label>
