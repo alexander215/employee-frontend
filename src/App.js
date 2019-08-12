@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 // ^^This is from the tutorial
 import LandingPage from './LandingPage';
 import Register from './Register';
+import Login from './Login';
 import EmployeeContainer from './EmployeeContainer';
 import './App.css';
 
@@ -11,7 +12,8 @@ class App extends Component {
   render() {
     return (
       <main>
-        <Route exact path='/' component={ Register } />
+        {/* <Route exact path='/' component={ Register } /> */}
+        <Route exact path='/' component={ Login } />
         <Route exact path='/employees' component={ EmployeeContainer } />
       </main>
     )

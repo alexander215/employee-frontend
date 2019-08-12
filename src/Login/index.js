@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 class Login extends Component {
     state = {
         username: '',
-        password: ''
+        password: '',
+        message: ''
     }
 
     handleChange = (e) => {
@@ -14,7 +15,7 @@ class Login extends Component {
 
     handleSubmit = async(e) => {
         e.preventDefault();
-        const register = await fetch('http://localhost:9000/auth/register', {
+        const login = await fetch('http://localhost:9000/auth/login', {
             method: 'POST',
             credentials: 'include',
             body: JSON.stringify(this.state),
@@ -22,11 +23,25 @@ class Login extends Component {
                 'Content-Type': 'application/json'
             }
         })
+        const parsedLogin = await login.json();
+        console.log(parsedLogin, "<--parsedLogin from handleSubmit in login")
+
+        if (parsedLogin.status.message === "User Logged In") {
+            console.log('logged in')
+            this.setState({
+                message: ''
+            })
+            this.props.history.push('/employees')
+        } else {
+            this.setState({
+                message: "Incorrect username or password"
+            })
+        }
     }
 
     render() {
         return (
-            <form>
+            <form onSubmit={ this.handleSubmit }>
                 <label>
                     Username:
                 </label>
@@ -38,6 +53,7 @@ class Login extends Component {
                 <button type="submit">
                     Login
                 </button>
+                { this.state.message.length ? <div>{this.state.message}</div> : null }
             </form>
         )
     }

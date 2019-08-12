@@ -14,6 +14,12 @@ class EmployeeContainer extends Component {
             birthDate: '',
             department: '',
             annualSalary: ''
+        },
+        currentUser: {
+            username: '',
+            password: '',
+            isAdmin: false
+
         }
     }
 
@@ -112,7 +118,7 @@ class EmployeeContainer extends Component {
             const createEmployeeResponse = await createEmployee.json();
             console.log(createEmployeeResponse.data, '<--createEmployeeResponse.data')
             this.setState(prevState => ({
-                employees: [...prevState.employees, createEmployeeResponse.data]
+                employees: [...prevState.employees, createEmployeeResponse.data],
 
             }))
             console.log(this.state, '<--new state')
