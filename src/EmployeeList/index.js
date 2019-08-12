@@ -10,7 +10,7 @@ const Employees = (props) => {
                 <div>{employee.department}</div>
                 <div>{employee.annualSalary}</div>
                 <button onClick={props.showModal.bind(null, employee)} type="submit">Edit</button>
-                <button type="submit">Delete</button>
+                <button onClick={ () => props.delete(employee) } >Delete</button>
             </li>
         )
     })

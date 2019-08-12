@@ -121,11 +121,31 @@ class EmployeeContainer extends Component {
 
     }
 
+    deleteEmployee = async (employee) => {
+        const deleteRequest = await fetch('http://localhost:9000/api/v1/employee/' + employee._id, {
+            method: 'DELETE',
+            credentials: 'include'
+        })
+        console.log(deleteRequest, '<--deleteRequest in deleteEmployee')
+        if (deleteRequest.status !== 200){
+            throw Error ('Delete request not working')
+        }
+        const deleteResponse = await deleteRequest.json();
+        console.log(deleteResponse, '<--deleteResponse in deleteEmployee');
+        
+        const truncatedEmployeeList = this.state.employees.filter(employee => deleteResponse.data._id !== employee._id);
+        console.log(truncatedEmployeeList, '<-- truncatedEmployeeList in deleteEmployee')
+        
+        this.setState({
+            employees: truncatedEmployeeList
+        })
+    }
+
     render() {
         return (
             <div className="employee-container">
                 <CreateEmployee addEmployee={ this.addEmployee } />
-                <Employees employees={this.state.employees} showModal={this.showModal} />
+                <Employees employees={this.state.employees} showModal={this.showModal} delete={this.deleteEmployee} />
                 {this.state.showEditModal ? <EditEmployee closeAndEdit={this.closeAndEdit} employeeToEdit={this.state.employeeToEdit} handleFormChange={this.handleFormChange} /> : null }
             </div>
         )
